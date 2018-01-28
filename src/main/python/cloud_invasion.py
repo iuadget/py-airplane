@@ -5,7 +5,7 @@ from pygame.sprite import Group
 
 from settings import Settings
 from ship import Ship
-from cloud import Cloud
+# from cloud import Cloud
 import game_functions as gf
 
 def run_game():
@@ -20,13 +20,18 @@ def run_game():
     # Создание пули
     bullets = Group()
     # создаем облако
-    cloud = Cloud(ai_settings, screen)
+    clouds = Group()
+    # cloud = Cloud(ai_settings, screen)
+
+    # Создаем облака
+    gf.create_clouds(ai_settings, screen, ship, clouds)
 
     # Запуск основного цикла программы
     while True:
         gf.check_events(ai_settings, screen, ship, bullets)
         ship.update()
         gf.update_bullets(bullets)
-        gf.update_screen(ai_settings, screen, ship, cloud, bullets)
+        gf.update_screen(ai_settings, screen, ship,
+                         clouds, bullets)
 
 run_game()

@@ -2,6 +2,7 @@ import sys
 
 import pygame
 from bullet import Bullet
+from cloud import Cloud
 
 def check_keydown_events(event, ai_settings, screen, ship, bullets):
     """Реагируем на нажатие клавиш"""
@@ -49,14 +50,15 @@ def check_events(ai_settings, screen, ship, bullets):
             check_keyup_events(event, ship)
 
 
-def update_screen(ai_settings, screen, ship, cloud, bullets):
+def update_screen(ai_settings, screen, ship, clouds, bullets):
 
     screen.fill(ai_settings.bg_color)
     for bullet in bullets.sprites():
         bullet.draw_bullet()
     ship.blitme()
-    cloud.blitme()
+    clouds.draw(screen)
 
+    # Отображение последнего отрисованного экрана
     pygame.display.flip()
 
 def update_bullets(bullets):
@@ -68,3 +70,37 @@ def update_bullets(bullets):
         if bullet.rect.bottom <= 0:
             bullets.remove(bullet)
 
+def get_number_clouds_x(ai_settings, cloud_width):
+    """Вычисляет количество облаков"""
+    available_space_x = ai_settings.screen_width - 2 * cloud_width
+    number_clouds_x = int(available_space_x / (2 * cloud_width))
+    return number_clouds_x
+
+def get_number_rows(ai_settings, ship_height, cloud_height):
+    """Определяем количество рядов"""
+    available_space_y = (ai_settings.screen_height -
+                         (3 * cloud_height) - ship_height)
+    number_rows = int(available_space_y / (2 * cloud_height))
+    return number_rows
+
+def create_cloud(ai_settings, screen, clouds, cloud_number, row_number):
+    cloud = Cloud(ai_settings, screen)
+    cloud_width = cloud.rect.width
+    cloud.x = cloud_width + 2 * cloud_width * cloud_number
+    cloud.rect.x = cloud.x
+    cloud.rect.y = cloud.rect.height + 2 * cloud.rect.height * row_number
+    clouds.add(cloud)
+
+def create_clouds(ai_settings, screen, ship, clouds):
+    """Создание облаков"""
+    cloud = Cloud(ai_settings, screen)
+    number_clouds_x = get_number_clouds_x(ai_settings, cloud.rect.width)
+    cloud_width = cloud.rect.width
+    number_rows = get_number_rows(ai_settings, ship.rect.height,
+                                  cloud.rect.height)
+
+    # Создание рядов облаков
+    for row_number in range(number_rows):
+        for cloud_number in range(number_clouds_x):
+            create_cloud(ai_settings, screen, clouds, cloud_number,
+                         row_number)
