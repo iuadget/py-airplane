@@ -16,7 +16,8 @@ def check_keydown_events(event, ai_settings, screen, ship, bullets):
     elif event.key == pygame.K_SPACE:
         # Создание новой пули
         fire_bullet(ai_settings, screen, ship, bullets)
-
+    elif event.key == pygame.K_q:
+        sys.exit()
 
 def fire_bullet(ai_settings, screen, ship, bullets):
     """Выускаем пулю"""
