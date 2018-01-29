@@ -61,7 +61,7 @@ def update_screen(ai_settings, screen, ship, clouds, bullets):
     # Отображение последнего отрисованного экрана
     pygame.display.flip()
 
-def update_bullets(clouds, bullets):
+def update_bullets(ai_settings, screen, ship, clouds, bullets):
     """Обновляем позицию пуль"""
     bullets.update()
 
@@ -71,7 +71,17 @@ def update_bullets(clouds, bullets):
             bullets.remove(bullet)
 
     # Проверка попадания пуль
+    check_bullet_cloud_collision(ai_settings, screen, ship, clouds, bullets)
+
+def check_bullet_cloud_collision(ai_settings, screen, ship, clouds, bullets):
+    """Обработка колизий пуль с облаками"""
     collisions = pygame.sprite.groupcollide(bullets, clouds, True, True)
+
+    if len(clouds) == 0:
+        # Уничтожение существующих пуль и создание новых облаков
+        bullets.empty()
+        create_clouds(ai_settings, screen, ship, clouds)
+
 
 def get_number_clouds_x(ai_settings, cloud_width):
     """Вычисляет количество облаков"""
