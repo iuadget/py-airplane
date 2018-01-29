@@ -12,3 +12,8 @@ class Settings():
         self.bullet_height = 10
         self.bullet_color = (255, 69, 0)
         self.bullet_allowed = 5
+        # Параметры облаков
+        self.cloud_speed_factor = 0.5
+        self.clouds_drop_speed = 10
+        #
+        self.clouds_direction = 1

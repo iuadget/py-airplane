@@ -104,3 +104,21 @@ def create_clouds(ai_settings, screen, ship, clouds):
         for cloud_number in range(number_clouds_x):
             create_cloud(ai_settings, screen, clouds, cloud_number,
                          row_number)
+
+def check_clouds_edges(ai_settings, clouds):
+    """Реагируем на дстижение облаком края экрана"""
+    for cloud in clouds.sprites():
+        if cloud.check_edge():
+            change_clouds_direction(ai_settings, clouds)
+            break
+
+def change_clouds_direction(ai_settings, clouds):
+    """Опускает все облака и меняет направление движения"""
+    for cloud in clouds.sprites():
+        cloud.rect.y += ai_settings.clouds_drop_speed
+    ai_settings.clouds_direction *= -1
+
+def update_clouds(ai_settings, clouds):
+    """Обновляет позиции облаков"""
+    check_clouds_edges(ai_settings, clouds)
+    clouds.update()
