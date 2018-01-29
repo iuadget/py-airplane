@@ -1,4 +1,5 @@
 import sys
+from time import sleep
 
 import pygame
 from bullet import Bullet
@@ -131,7 +132,42 @@ def change_clouds_direction(ai_settings, clouds):
         cloud.rect.y += ai_settings.clouds_drop_speed
     ai_settings.clouds_direction *= -1
 
-def update_clouds(ai_settings, clouds):
+def update_clouds(ai_settings, stats, screen, ship, clouds,
+                  bullets):
     """Обновляет позиции облаков"""
     check_clouds_edges(ai_settings, clouds)
     clouds.update()
+
+    # Проверка коллизии корабля с облаком
+    if pygame.sprite.spritecollideany(ship, clouds):
+        ship_hit(ai_settings, stats, screen, ship, clouds, bullets)
+
+    # check_clouds_bottom(ai_settings, stats, screen, ship, clouds, bullets)
+
+def ship_hit(ai_settings, stats, screen, ship, clouds, bullets):
+    """Обработка столкновения"""
+    if stats.ships_left > 0:
+        # Уменьшение ship_left
+        stats.ships_left -= 1
+
+        # Очистка списка облаков и пуль
+        clouds.empty()
+        bullets.empty()
+
+        # Создание новых облаков и размещение самолета в центре
+        create_clouds(ai_settings, screen, ship, clouds)
+        ship.center_ship()
+
+        #  Пауза
+        sleep(0.5)
+
+    else:
+        stats.game_active = False
+
+def check_clouds_bottom(ai_settings, stats, screen, ship, clouds, bullets):
+    """Проверяем добрались облака до нижнего края"""
+    screen_rect = screen.get_rect()
+    for cloud in clouds.sprite():
+        if cloud.rect.bottom >= screen_rect.bottom:
+            ship_hit(ai_settings, stats, screen, ship, clouds, bullets)
+            break

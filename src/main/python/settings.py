@@ -6,6 +6,7 @@ class Settings():
         self.screen_height = 800
         self.bg_color = (135, 206, 235)
         self.ship_speed_factor = 1.5
+        self.ship_limit = 1
         # Параметры пули
         self.bullet_speed_factor = 3
         self.bullet_width = 5
@@ -15,5 +16,4 @@ class Settings():
         # Параметры облаков
         self.cloud_speed_factor = 0.5
         self.clouds_drop_speed = 10
-        #
         self.clouds_direction = 1
