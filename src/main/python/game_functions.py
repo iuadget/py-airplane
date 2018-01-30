@@ -51,7 +51,8 @@ def check_events(ai_settings, screen, ship, bullets):
             check_keyup_events(event, ship)
 
 
-def update_screen(ai_settings, screen, ship, clouds, bullets):
+def update_screen(ai_settings, screen, stats, ship, clouds, bullets,
+                  play_button):
 
     screen.fill(ai_settings.bg_color)
     for bullet in bullets.sprites():
@@ -59,6 +60,9 @@ def update_screen(ai_settings, screen, ship, clouds, bullets):
     ship.blitme()
     clouds.draw(screen)
 
+    # Кнопка отображается в том случае, если игра неактивна
+    if not stats.game_active:
+        play_button.draw_button()
     # Отображение последнего отрисованного экрана
     pygame.display.flip()
 
