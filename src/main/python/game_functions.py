@@ -58,8 +58,12 @@ def check_events(ai_settings, screen, stats, play_button, ship, clouds,
 def check_play_button(ai_settings, screen, stats, play_button, ship, clouds,
                       bullets, mouse_x, mouse_y):
     """Запускаем новую игру при нажатии кнопки"""
-    if play_button.rect.collidepoint(mouse_x, mouse_y):
-        # Сброс ститистики
+    button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
+    if button_clicked and not stats.game_active:
+        # Сокрытие курсора мыши
+        pygame.mouse.set_visible(False)
+
+        # Сброс статистики
         stats.reset_stats()
         stats.game_active = True
 
@@ -187,6 +191,7 @@ def ship_hit(ai_settings, stats, screen, ship, clouds, bullets):
 
     else:
         stats.game_active = False
+        pygame.mouse.set_visible(True)
 
 def check_clouds_bottom(ai_settings, stats, screen, ship, clouds, bullets):
     """Проверяем добрались облака до нижнего края"""
