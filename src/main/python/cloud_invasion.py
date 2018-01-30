@@ -37,15 +37,13 @@ def run_game():
     # Запуск основного цикла программы
     while True:
         gf.check_events(ai_settings, screen, stats, play_button, ship,
-                        bullets)
+                        clouds, bullets)
 
         if stats.game_active:
             ship.update()
             gf.update_bullets(ai_settings, screen, ship, clouds, bullets)
             gf.update_clouds(ai_settings, stats, screen, ship, clouds,
                   bullets)
-        # else:
-        #     sys.exit()
 
         gf.update_screen(ai_settings, screen, stats, ship, clouds, bullets,
                          play_button)

@@ -39,7 +39,8 @@ def check_keyup_events(event, ship):
         ship.moving_up = False
 
 
-def check_events(ai_settings, screen, stats, play_button, ship, bullets):
+def check_events(ai_settings, screen, stats, play_button, ship, clouds,
+                 bullets):
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -50,12 +51,25 @@ def check_events(ai_settings, screen, stats, play_button, ship, bullets):
             check_keyup_events(event, ship)
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            check_play_button(stats, play_button, mouse_x, mouse_y)
+            check_play_button(ai_settings, screen, stats,
+                              play_button, ship, clouds,
+                              bullets, mouse_x, mouse_y)
 
-def check_play_button(stats, play_button, mouse_x, mouse_y):
+def check_play_button(ai_settings, screen, stats, play_button, ship, clouds,
+                      bullets, mouse_x, mouse_y):
     """Запускаем новую игру при нажатии кнопки"""
     if play_button.rect.collidepoint(mouse_x, mouse_y):
+        # Сброс ститистики
+        stats.reset_stats()
         stats.game_active = True
+
+        # Сброс списков облаков и пуль
+        clouds.empty()
+        bullets.empty()
+
+        # Создание новых облаков и размещение самолета в центре
+        create_clouds(ai_settings, screen, ship, clouds)
+        ship.center_ship()
 
 def update_screen(ai_settings, screen, stats, ship, clouds, bullets,
                   play_button):
