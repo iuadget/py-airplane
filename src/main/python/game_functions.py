@@ -78,7 +78,7 @@ def check_play_button(ai_settings, screen, stats, play_button, ship, clouds,
         create_clouds(ai_settings, screen, ship, clouds)
         ship.center_ship()
 
-def update_screen(ai_settings, screen, stats, ship, clouds, bullets,
+def update_screen(ai_settings, screen, stats, sb, ship, clouds, bullets,
                   play_button):
 
     screen.fill(ai_settings.bg_color)
@@ -87,13 +87,16 @@ def update_screen(ai_settings, screen, stats, ship, clouds, bullets,
     ship.blitme()
     clouds.draw(screen)
 
+    # Вывод счета
+    sb.show_score()
+
     # Кнопка отображается в том случае, если игра неактивна
     if not stats.game_active:
         play_button.draw_button()
     # Отображение последнего отрисованного экрана
     pygame.display.flip()
 
-def update_bullets(ai_settings, screen, ship, clouds, bullets):
+def update_bullets(ai_settings, screen, stats, sb, ship, clouds, bullets):
     """Обновляем позицию пуль"""
     bullets.update()
 
@@ -103,11 +106,18 @@ def update_bullets(ai_settings, screen, ship, clouds, bullets):
             bullets.remove(bullet)
 
     # Проверка попадания пуль
-    check_bullet_cloud_collision(ai_settings, screen, ship, clouds, bullets)
+    check_bullet_cloud_collision(ai_settings, screen, stats, sb, ship,
+                                 clouds, bullets)
 
-def check_bullet_cloud_collision(ai_settings, screen, ship, clouds, bullets):
+def check_bullet_cloud_collision(ai_settings, screen, stats, sb, ship,
+                                 clouds, bullets):
     """Обработка колизий пуль с облаками"""
     collisions = pygame.sprite.groupcollide(bullets, clouds, True, True)
+
+    if collisions:
+        for clouds in collisions.values():
+            stats.score += ai_settings.cloud_points * len(clouds)
+            sb.prep_score()
 
     if len(clouds) == 0:
         # Уничтожение существующих пуль и создание новых облаков

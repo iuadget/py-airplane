@@ -27,6 +27,9 @@ class Settings():
         self.cloud_speed_factor = 0.5
         self.clouds_direction = 1
 
+        # Подсчет очков
+        self.cloud_points = 50
+
     def increase_speed(self):
         """Увеличивает настройки скорости"""
         self.ship_speed_factor *= self.speedup_scale

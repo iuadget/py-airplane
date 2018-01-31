@@ -5,6 +5,7 @@ from pygame.sprite import Group
 
 from settings import Settings
 from game_stats import GameStats
+from scoreboard import Scoreboard
 from ship import Ship
 from button import Button
 
@@ -23,6 +24,7 @@ def run_game():
 
     # Создание экземпляра для хранения статистики
     stats = GameStats(ai_settings)
+    sb = Scoreboard(ai_settings, screen, stats)
 
     # Создание корабля
     ship = Ship(ai_settings, screen)
@@ -41,11 +43,12 @@ def run_game():
 
         if stats.game_active:
             ship.update()
-            gf.update_bullets(ai_settings, screen, ship, clouds, bullets)
+            gf.update_bullets(ai_settings, screen, stats, sb, ship,
+                              clouds, bullets)
             gf.update_clouds(ai_settings, stats, screen, ship, clouds,
                   bullets)
 
-        gf.update_screen(ai_settings, screen, stats, ship, clouds, bullets,
-                         play_button)
+        gf.update_screen(ai_settings, screen, stats, sb, ship, clouds,
+                         bullets, play_button)
 
 run_game()
