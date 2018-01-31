@@ -60,6 +60,9 @@ def check_play_button(ai_settings, screen, stats, play_button, ship, clouds,
     """Запускаем новую игру при нажатии кнопки"""
     button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
     if button_clicked and not stats.game_active:
+        # Сброс игровых настроек
+        ai_settings.initialize_dynamic_settings()
+
         # Сокрытие курсора мыши
         pygame.mouse.set_visible(False)
 
@@ -109,6 +112,7 @@ def check_bullet_cloud_collision(ai_settings, screen, ship, clouds, bullets):
     if len(clouds) == 0:
         # Уничтожение существующих пуль и создание новых облаков
         bullets.empty()
+        ai_settings.increase_speed()
         create_clouds(ai_settings, screen, ship, clouds)
 
 
