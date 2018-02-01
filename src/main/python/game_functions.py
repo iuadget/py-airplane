@@ -74,6 +74,7 @@ def check_play_button(ai_settings, screen, stats, sb, play_button, ship,
         sb.prep_score()
         sb.prep_high_score()
         sb.prep_level()
+        sb.prep_ships()
 
         # Сброс списков облаков и пуль
         clouds.empty()
@@ -184,7 +185,7 @@ def change_clouds_direction(ai_settings, clouds):
         cloud.rect.y += ai_settings.clouds_drop_speed
     ai_settings.clouds_direction *= -1
 
-def update_clouds(ai_settings, stats, screen, ship, clouds,
+def update_clouds(ai_settings, screen, stats, sb, ship, clouds,
                   bullets):
     """Обновляет позиции облаков"""
     check_clouds_edges(ai_settings, clouds)
@@ -192,15 +193,18 @@ def update_clouds(ai_settings, stats, screen, ship, clouds,
 
     # Проверка коллизии корабля с облаком
     if pygame.sprite.spritecollideany(ship, clouds):
-        ship_hit(ai_settings, stats, screen, ship, clouds, bullets)
+        ship_hit(ai_settings, screen, stats, sb, ship, clouds, bullets)
 
     # check_clouds_bottom(ai_settings, stats, screen, ship, clouds, bullets)
 
-def ship_hit(ai_settings, stats, screen, ship, clouds, bullets):
+def ship_hit(ai_settings, screen, stats, sb, ship, clouds, bullets):
     """Обработка столкновения"""
     if stats.ships_left > 0:
         # Уменьшение ship_left
         stats.ships_left -= 1
+
+        # Обновление информации
+        sb.prep_ships()
 
         # Очистка списка облаков и пуль
         clouds.empty()
@@ -217,12 +221,12 @@ def ship_hit(ai_settings, stats, screen, ship, clouds, bullets):
         stats.game_active = False
         pygame.mouse.set_visible(True)
 
-def check_clouds_bottom(ai_settings, stats, screen, ship, clouds, bullets):
+def check_clouds_bottom(ai_settings, screen, stats, sb, ship, clouds, bullets):
     """Проверяем добрались облака до нижнего края"""
     screen_rect = screen.get_rect()
     for cloud in clouds.sprite():
         if cloud.rect.bottom >= screen_rect.bottom:
-            ship_hit(ai_settings, stats, screen, ship, clouds, bullets)
+            ship_hit(ai_settings, screen, stats, sb, ship, clouds, bullets)
             break
 
 def check_high_score(stats, sb):

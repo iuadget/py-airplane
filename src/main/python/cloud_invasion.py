@@ -45,7 +45,7 @@ def run_game():
             ship.update()
             gf.update_bullets(ai_settings, screen, stats, sb, ship,
                               clouds, bullets)
-            gf.update_clouds(ai_settings, stats, screen, ship, clouds,
+            gf.update_clouds(ai_settings, screen, stats, sb, ship, clouds,
                   bullets)
 
         gf.update_screen(ai_settings, screen, stats, sb, ship, clouds,
