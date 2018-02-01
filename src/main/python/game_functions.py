@@ -39,7 +39,7 @@ def check_keyup_events(event, ship):
         ship.moving_up = False
 
 
-def check_events(ai_settings, screen, stats, play_button, ship, clouds,
+def check_events(ai_settings, screen, stats, sb, play_button, ship, clouds,
                  bullets):
 
     for event in pygame.event.get():
@@ -51,12 +51,12 @@ def check_events(ai_settings, screen, stats, play_button, ship, clouds,
             check_keyup_events(event, ship)
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            check_play_button(ai_settings, screen, stats,
+            check_play_button(ai_settings, screen, stats, sb,
                               play_button, ship, clouds,
                               bullets, mouse_x, mouse_y)
 
-def check_play_button(ai_settings, screen, stats, play_button, ship, clouds,
-                      bullets, mouse_x, mouse_y):
+def check_play_button(ai_settings, screen, stats, sb, play_button, ship,
+                      clouds, bullets, mouse_x, mouse_y):
     """Запускаем новую игру при нажатии кнопки"""
     button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
     if button_clicked and not stats.game_active:
@@ -69,6 +69,11 @@ def check_play_button(ai_settings, screen, stats, play_button, ship, clouds,
         # Сброс статистики
         stats.reset_stats()
         stats.game_active = True
+
+        # Сброс изображения
+        sb.prep_score()
+        sb.prep_high_score()
+        sb.prep_level()
 
         # Сброс списков облаков и пуль
         clouds.empty()
@@ -124,6 +129,10 @@ def check_bullet_cloud_collision(ai_settings, screen, stats, sb, ship,
         # Уничтожение существующих пуль и создание новых облаков
         bullets.empty()
         ai_settings.increase_speed()
+
+        # Увеличение уровня
+        stats.level += 1
+        sb.prep_level()
         create_clouds(ai_settings, screen, ship, clouds)
 
 
