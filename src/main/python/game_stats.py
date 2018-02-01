@@ -8,6 +8,9 @@ class GameStats():
 
         self.game_active = False
 
+        # Запись рекорда
+        self.high_score = 0
+
     def reset_stats(self):
         """Инициализируем статистику по ходу игры"""
         self.ships_left = self.ai_settings.ship_limit

@@ -118,6 +118,7 @@ def check_bullet_cloud_collision(ai_settings, screen, stats, sb, ship,
         for clouds in collisions.values():
             stats.score += ai_settings.cloud_points * len(clouds)
             sb.prep_score()
+            check_high_score(stats, sb)
 
     if len(clouds) == 0:
         # Уничтожение существующих пуль и создание новых облаков
@@ -214,3 +215,9 @@ def check_clouds_bottom(ai_settings, stats, screen, ship, clouds, bullets):
         if cloud.rect.bottom >= screen_rect.bottom:
             ship_hit(ai_settings, stats, screen, ship, clouds, bullets)
             break
+
+def check_high_score(stats, sb):
+    """Проверка на рекорд"""
+    if stats.score > stats.high_score:
+        stats.high_score = stats.score
+        sb.prep_high_score()
